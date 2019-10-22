@@ -121,7 +121,7 @@ if __name__ == '__main__':
         if (args.mode == 'train'):
             train_abs(args, device_id)
         elif (args.mode == 'validate'):
-            print(111)
+            print("validate")
             validate_abs(args, device_id)
         elif (args.mode == 'lead'):
             baseline(args, cal_lead=True)

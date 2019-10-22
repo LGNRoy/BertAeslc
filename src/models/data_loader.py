@@ -72,7 +72,7 @@ def load_dataset(args, corpus_type, shuffle):
     Returns:
         A list of dataset, the dataset(s) are lazily loaded.
     """
-    assert corpus_type in ["train", "valid", "test"]
+    assert corpus_type in ["train", "dev", "test"]
 
     def _lazy_dataset_loader(pt_file, corpus_type):
         dataset = torch.load(pt_file)
@@ -95,33 +95,35 @@ def load_dataset(args, corpus_type, shuffle):
 
 
 def abs_batch_size_fn(new, count):
-    src, tgt = new[0], new[1]
-    global max_n_sents, max_n_tokens, max_size
-    if count == 1:
-        max_size = 0
-        max_n_sents=0
-        max_n_tokens=0
-    max_n_sents = max(max_n_sents, len(tgt))
-    max_size = max(max_size, max_n_sents)
-    src_elements = count * max_size
-    if (count > 6):
-        return src_elements + 1e3
-    return src_elements
+    # src, tgt = new[0], new[1]
+    # global max_n_sents, max_n_tokens, max_size
+    # if count == 1:
+    #     max_size = 0
+    #     max_n_sents=0
+    #     max_n_tokens=0
+    # max_n_sents = max(max_n_sents, len(tgt))
+    # max_size = max(max_size, max_n_sents)
+    # src_elements = count * max_size
+    # if (count > 6):
+    #     return src_elements + 1e3
+    # return src_elements
+    return count
 
 
 def ext_batch_size_fn(new, count):
-    if (len(new) == 4):
-        pass
-    src, labels = new[0], new[4]
-    global max_n_sents, max_n_tokens, max_size
-    if count == 1:
-        max_size = 0
-        max_n_sents = 0
-        max_n_tokens = 0
-    max_n_sents = max(max_n_sents, len(src))
-    max_size = max(max_size, max_n_sents)
-    src_elements = count * max_size
-    return src_elements
+    # if (len(new) == 4):
+    #     pass
+    # src, labels = new[0], new[4]
+    # global max_n_sents, max_n_tokens, max_size
+    # if count == 1:
+    #     max_size = 0
+    #     max_n_sents = 0
+    #     max_n_tokens = 0
+    # max_n_sents = max(max_n_sents, len(src))
+    # max_size = max(max_size, max_n_sents)
+    # src_elements = count * max_size
+    # return src_elements
+    return count
 
 
 class Dataloader(object):
@@ -184,11 +186,6 @@ class DataIterator(object):
             random.shuffle(self.dataset)
         xs = self.dataset
         return xs
-
-
-
-
-
 
     def preprocess(self, ex, is_test):
         src = ex['src']
